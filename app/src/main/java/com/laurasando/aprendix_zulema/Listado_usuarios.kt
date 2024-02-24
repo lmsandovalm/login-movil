@@ -13,12 +13,11 @@ class Listado_usuarios : AppCompatActivity() {
         setContentView(R.layout.activity_listado_usuarios)
 
         val listUsuarios = findViewById<ListView>(R.id.lista_usuarios)
-        val bdManager = BdManager(this)
-        val dataCiudad = bdManager.listData()
 
-        listUsuarios.setOnItemClickListener{ parent, view, position, id ->
-            Toast.makeText(this, "Usuario Registrado " + parent.getItemAtPosition(position), Toast.LENGTH_SHORT).show()
-        }
+        val bdManager = BdManager(this)
+        val dataUser = bdManager.listData()
+        val adapterUser = ArrayAdapter(this,android.R.layout.simple_list_item_1,dataUser)
+        listUsuarios.adapter=adapterUser
 
 
     }

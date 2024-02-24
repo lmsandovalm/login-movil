@@ -1,5 +1,6 @@
 package com.laurasando.aprendix_zulema
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -19,6 +20,8 @@ class Registro_usuarios : AppCompatActivity() {
         val contraEdit = findViewById<EditText>(R.id.edt_regis_contra)
         val nomusEdit = findViewById<EditText>(R.id.edt_nomUsuario)
         val btnRegistrarse = findViewById<Button>(R.id.btn_guardarRegistro)
+        val btnMostrar = findViewById<Button>(R.id.btn_mostrarDatos)
+
 
         btnRegistrarse.setOnClickListener{
             val nombre= nombreEdit.text.toString()
@@ -29,7 +32,7 @@ class Registro_usuarios : AppCompatActivity() {
             val nombreUsuario= nomusEdit.text.toString()
 
             val managerDb = BdManager(this)
-            val resul = managerDb.inserData(nombre, apellido, telefono.toInt(), cedula.toInt(), contrasena.toInt(), nombreUsuario )
+            val resul = managerDb.inserData(nombre, apellido, telefono, cedula, contrasena, nombreUsuario )
 
             if (resul>0){
                 Toast.makeText(this, "Datos Insertados" + resul, Toast.LENGTH_SHORT).show()
@@ -37,7 +40,17 @@ class Registro_usuarios : AppCompatActivity() {
                 Toast.makeText(this, "Ha ocurrido un problema" + resul, Toast.LENGTH_SHORT).show()
             }
 
+            intent = Intent(this,MainActivity::class.java)
+            startActivity(intent)
+
         }
+
+            btnMostrar.setOnClickListener {
+                intent = Intent(this,Listado_usuarios::class.java)
+                startActivity(intent)
+            }
+
+
 
     }
 }

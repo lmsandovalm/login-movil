@@ -1,5 +1,6 @@
 package com.laurasando.aprendix_zulema.basedatos
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
@@ -18,7 +19,9 @@ class BdManager(val context: Context) {
         bd= bdHelper.readableDatabase
     }
 
-    fun inserData(nombre: String, apellido: String, telefono: Int, cedula: Int, contrasena: Int, nomUsuario: String): Long {
+    @SuppressLint("SuspiciousIndentation")
+    fun inserData(nombre: String, apellido: String, telefono: String, cedula: String, contrasena: String, nomUsuario: String): Long {
+
         openBdWr()
 
         val  values = ContentValues()
@@ -26,7 +29,7 @@ class BdManager(val context: Context) {
         values.put("apellido", apellido)
         values.put("telefono", telefono)
         values.put("cedula", cedula)
-        values.put("contraseña", contrasena)
+        values.put("contrasena", contrasena)
         values.put("nom_usuario", nomUsuario)
 
         val resul = bd.insert("usuarios", null, values)
@@ -48,15 +51,26 @@ class BdManager(val context: Context) {
                 val nomusIndex = cursor.getColumnIndex("nom_usuario")
                 val nombre = cursor.getString(nombreIndex)
                 val apellido   = cursor.getString(apellidoIndex)
-                val telefono   = cursor.getInt(telefonoIndex)
-                val cedula   = cursor.getInt(cedulaIndex)
-                val contrasena   = cursor.getInt(contraIndex)
+                val telefono   = cursor.getString(telefonoIndex)
+                val cedula   = cursor.getString(cedulaIndex)
+                val contrasena   = cursor.getString(contraIndex)
                 val nombreUsuario   = cursor.getString(nomusIndex)
+
                 val usuario = Usuario(nombre, apellido, telefono, cedula, contrasena, nombreUsuario)
+
                 usuarioList.add(usuario)
             } while (cursor.moveToNext())
         }
         return usuarioList
+    }   fun login(nombre: String, contrasena: String): Boolean {
+        openBdRd()
+
+        val cursor: Cursor = bd.rawQuery("SELECT * FROM usuarios WHERE nombre = ? AND contrasena = ?", arrayOf(nombre, contrasena))
+
+        val result = cursor.count > 0
+
+        cursor.close()
+        return result
     }
 
 
